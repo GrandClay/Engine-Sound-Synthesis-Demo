@@ -39,23 +39,6 @@ func _fill_buffer():
 		phase = fmod(phase + increment, 1.0)
 		to_fill -= 1
 
-	#while to_fill > 0:
-		#var pulse_wave = 0
-		#for i in range(20):
-			#pulse_wave += (sin(TAU * (2 * i - 1) * phase)) / (2 * i - 1) # square wave
-		#
-		##wave += sin(TAU * phase)
-		#var white_noise = randf()
-		#var low_pass_noise = (white_noise + previous_white_noise) / 2
-		#previous_white_noise = white_noise
-		#
-		#var engine_sound = max(pulse_wave, 0) * low_pass_noise
-		#
-		#playback.push_frame(Vector2.ONE * engine_sound) # Audio frames are stereo.
-		#phase = fmod(phase + increment, 1.0)
-		#to_fill -= 1
-
-
 func _process(_delta):
 	_fill_buffer()
 
