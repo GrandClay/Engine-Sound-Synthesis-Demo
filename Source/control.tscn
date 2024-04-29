@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://doiiakcsckw10"]
+[gd_scene load_steps=4 format=3 uid="uid://doiiakcsckw10"]
 
 [ext_resource type="Script" path="res://Source/control.gd" id="1_p5hol"]
+[ext_resource type="PackedScene" uid="uid://dpalo2bkftm51" path="res://Debug/analyzer.tscn" id="2_x2gm3"]
 
 [sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_xp8q3"]
 mix_rate = 22050.0
@@ -50,5 +51,8 @@ text = "rpm: 700"
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamGenerator_xp8q3")
 bus = &"Engine"
+
+[node name="Analyzer" parent="." instance=ExtResource("2_x2gm3")]
+position = Vector2(243, 433)
 
 [connection signal="value_changed" from="HSlider" to="." method="_on_h_slider_value_changed"]

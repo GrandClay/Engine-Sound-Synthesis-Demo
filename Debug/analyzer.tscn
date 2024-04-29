@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://dpalo2bkftm51"]
+
+[ext_resource type="Shader" path="res://Debug/analyzer.gdshader" id="1_jhu1b"]
+[ext_resource type="Script" path="res://Debug/analyzer.gd" id="1_jk2l2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5a5es"]
+shader = ExtResource("1_jhu1b")
+shader_parameter/freq_data = null
+
+[node name="Analyzer" type="Node2D"]
+script = ExtResource("1_jk2l2")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_5a5es")
+offset_right = 700.0
+offset_bottom = 40.0

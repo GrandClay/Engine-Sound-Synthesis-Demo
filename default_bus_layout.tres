@@ -1,4 +1,7 @@
-[gd_resource type="AudioBusLayout" load_steps=2 format=3 uid="uid://buw5cexrxdsgc"]
+[gd_resource type="AudioBusLayout" load_steps=3 format=3 uid="uid://buw5cexrxdsgc"]
+
+[sub_resource type="AudioEffectSpectrumAnalyzer" id="AudioEffectSpectrumAnalyzer_flc5u"]
+resource_name = "SpectrumAnalyzer"
 
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_cdk01"]
 resource_name = "Reverb"
@@ -7,6 +10,8 @@ room_size = 0.1
 wet = 0.25
 
 [resource]
+bus/0/effect/0/effect = SubResource("AudioEffectSpectrumAnalyzer_flc5u")
+bus/0/effect/0/enabled = true
 bus/1/name = &"Engine"
 bus/1/solo = false
 bus/1/mute = false
