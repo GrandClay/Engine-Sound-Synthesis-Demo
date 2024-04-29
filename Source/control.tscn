@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://doiiakcsckw10"]
 
-[ext_resource type="Script" path="res://control.gd" id="1_p5hol"]
+[ext_resource type="Script" path="res://Source/control.gd" id="1_p5hol"]
 
 [sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_xp8q3"]
 mix_rate = 22050.0
