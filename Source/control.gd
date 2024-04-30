@@ -8,7 +8,8 @@ extends Control
 @export var strokes: int = 4
 
 @export_category("Sound Characteristics")
-@export_range(0.0, 1.0) var duty_cycle: float = 0.35
+@export_range(0.0, 1.0) var duty_cycle: float = 0.35 ## Changes how long the enigne pulses are. Lower numbers result in shorter pulses.
+@export_range(2, 20) var wave_quality: int = 10 ## Higher numbers result in poor performance.
 
 var rpm: float = 0.0
 var pulse_hz: float = 0.0
@@ -22,7 +23,7 @@ func _fill_buffer() -> void:
 	var to_fill: int = playback.get_frames_available()
 	while to_fill > 0:
 		var pulse_wave: float = 0.0
-		for i in range(1, 10):
+		for i in range(1, wave_quality):
 			pulse_wave += (1/i) * sin(PI * i * duty_cycle) * cos(TAU * i * phase) # Create the pulse wave with 10 iterations.
 		
 		pulse_wave = pulse_wave * (4/PI) + (2*duty_cycle) - 1 # Amplitude and displacement correction of the pulse wave.
@@ -32,6 +33,7 @@ func _fill_buffer() -> void:
 		previous_white_noise = white_noise # White noise buffer used in the low pass filter.
 		
 		var engine_sound: float = max(0, pulse_wave) * low_pass_noise # Apply pulse to the white noise.
+		#engine_sound += sin(phase * TAU)
 		
 		playback.push_frame(Vector2.ONE * engine_sound) # Audio frames are stereo.
 		phase = fmod(phase + increment, 1.0)
