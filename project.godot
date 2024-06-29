@@ -25,3 +25,7 @@ folder_colors={
 "res://Debug/": "red",
 "res://Source/": "teal"
 }
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
