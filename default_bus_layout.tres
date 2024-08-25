@@ -5,6 +5,7 @@ resource_name = "SpectrumAnalyzer"
 
 [sub_resource type="AudioEffectChorus" id="AudioEffectChorus_dtb5v"]
 resource_name = "Chorus"
+wet = 0.25
 
 [resource]
 bus/0/effect/0/effect = SubResource("AudioEffectSpectrumAnalyzer_flc5u")
@@ -16,4 +17,4 @@ bus/1/bypass_fx = false
 bus/1/volume_db = 0.0
 bus/1/send = &"Master"
 bus/1/effect/0/effect = SubResource("AudioEffectChorus_dtb5v")
-bus/1/effect/0/enabled = true
+bus/1/effect/0/enabled = false
