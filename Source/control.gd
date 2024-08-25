@@ -2,7 +2,6 @@ extends Control
 
 @onready var audio_steam_player = $AudioStreamPlayer
 @onready var sample_hz = $AudioStreamPlayer.stream.mix_rate
-@onready var buffer_length = $AudioStreamPlayer.stream.buffer_length
 
 @export_category("Engine")
 @export var cylinders: int = 4## amount of cylinders the engine has
@@ -10,12 +9,10 @@ extends Control
 
 @export_category("Sound Characteristics")
 @export_range(0.0, 1.0) var duty_cycle: float = 0.3 ## Changes how long the enigne pulses are. Lower numbers result in shorter pulses.
-@export_range(0.1, 1.0) var full_pulse_wave_percent = 0.4## Deprecated. The percent of the RPM range where the crossfade becomes purely the pulse wave
+@export_range(0.1, 1.0) var full_pulse_wave_percent: float = 0.4 ## Deprecated. The percent of the RPM range where the crossfade becomes purely the pulse wave
 @export var wave_quality: int = 10 ## Higher numbers result in poor performance.
 @export var starting_volume_percent: float = 0.1 ## Volume of engine sound at idle
 
-var high_pass: bool = false
-@onready var duration_in_samples: float = sample_hz * buffer_length
 var cutoff_frequency: float = 15000
 
 var max_rpm: float = 7000.0
@@ -26,8 +23,6 @@ var phase: float = 0.0
 var playback: AudioStreamPlayback = null # Actual playback stream, assigned in _ready().
 var previous_white_noise: float = 0.0
 var previous_engine_noise: float = 0.0
-
-var comb: float = randf()
 
 func _fill_buffer() -> void:
 	var increment: float = pulse_hz / sample_hz
@@ -56,11 +51,8 @@ func _fill_buffer() -> void:
 		var low_pass_noise: float = (white_noise + previous_white_noise) / 2 # Simple low pass filter of the white noise.
 		previous_white_noise = white_noise # White noise buffer used in the low pass filter.
 		
-		comb += randf_range(-0.2, 0.2)
-		comb = clamp(comb, 0.0, 1.0)
-		
 		var volume: float = (rpm * ((1 - starting_volume_percent) / max_rpm)) + starting_volume_percent # increase volume with RPM
-		var engine_sound: float = max(0, pulse_wave) * low_pass_noise # Apply pulse to the white noise.
+		var engine_sound: float = max(0, pulse_wave) * white_noise # Apply pulse to the white noise.
 		
 		var cutoff_percent: float = (rpm - idle_rpm + 700)/(max_rpm - idle_rpm) # 700 is a number where it seems to work, no idea why
 		cutoff_frequency = 17000 * cutoff_percent # 17000 is aribitrary value to "turn off" the filter
