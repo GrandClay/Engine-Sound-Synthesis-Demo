@@ -17,7 +17,7 @@ var cutoff_frequency: float = 15000
 
 var max_rpm: float = 7000.0
 var idle_rpm: float = 700.0
-var rpm: float = 0.0
+var rpm: float = idle_rpm
 var pulse_hz: float = 0.0
 var phase: float = 0.0
 var playback: AudioStreamPlayback = null # Actual playback stream, assigned in _ready().
@@ -33,11 +33,11 @@ func _fill_buffer() -> void:
 	var to_fill: int = playback.get_frames_available()
 	while to_fill > 0:
 		#    saw wave crossfade not currently in use
-		#var saw_wave: float = 0.0
-		#for i in range(1, wave_quality):
-			#saw_wave += pow(-1, i) * (sin(TAU * phase * i) / i) # Create the saw wave with "wave_quality" amount of iterations.
+		var saw_wave: float = 0.0
+		for i in range(1, wave_quality):
+			saw_wave += pow(-1, i) * (sin(TAU * phase * i) / i) # Create the saw wave with "wave_quality" amount of iterations.
 		#
-		#saw_wave = saw_wave * (2/PI) * 0.7 # Amplitude correction of the saw wave; 0.7 is a volume adjustment to create a seamless crossfade.
+		saw_wave = saw_wave * (2/PI) * 0.7 # Amplitude correction of the saw wave; 0.7 is a volume adjustment to create a seamless crossfade.
 		
 		var pulse_wave: float = 0.0
 		for i in range(1, wave_quality):
@@ -51,11 +51,11 @@ func _fill_buffer() -> void:
 		var engine_sound: float = max(0, pulse_wave) * white_noise # Apply pulse to the white noise.
 		
 		var cutoff_percent: float = (rpm - idle_rpm + 700)/(max_rpm - idle_rpm) # 700 is a number where it seems to work, no idea why
-		cutoff_frequency = 17000 * cutoff_percent # 17000 is aribitrary value to "turn off" the filter
+		cutoff_frequency = 12000 * cutoff_percent # 12000 is aribitrary value to "turn off" the filter
 		
 		#    crossfade not currently in use
-		#var crossfade_percent: float = min((rpm - idle_rpm)/(max_rpm - idle_rpm) * (1.0/full_pulse_wave_percent), 1.0)
-		#var crossfade: float = (saw_wave * (1 - crossfade_percent)) + (engine_sound * crossfade_percent)
+		var crossfade_percent: float = min((rpm - idle_rpm)/(max_rpm - idle_rpm) * (1.0/full_pulse_wave_percent), 1.0)
+		var crossfade: float = (saw_wave * (1 - crossfade_percent)) + (engine_sound * crossfade_percent)
 		
 		buffer.push_back(engine_sound * volume) # sound buffer for post-processing
 		
@@ -76,6 +76,7 @@ func _fill_buffer() -> void:
 
 func _process(_delta) -> void:
 	_fill_buffer()
+	$fps.text = "fps: " + str(Engine.get_frames_per_second())
 
 func _ready() -> void:
 	set_rpm($HSlider.value)
