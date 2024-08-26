@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://dpalo2bkftm51" path="res://Debug/analyzer.tscn" id="2_x2gm3"]
 
 [sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_xp8q3"]
-mix_rate = 22050.0
 buffer_length = 0.05
 
 [node name="Control" type="Control"]
@@ -55,5 +54,12 @@ bus = &"Engine"
 
 [node name="Analyzer" parent="." instance=ExtResource("2_x2gm3")]
 position = Vector2(243, 433)
+
+[node name="fps" type="Label" parent="."]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 10.0
+offset_right = 58.0
+offset_bottom = 33.0
 
 [connection signal="value_changed" from="HSlider" to="." method="_on_h_slider_value_changed"]

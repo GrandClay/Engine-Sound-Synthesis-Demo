@@ -4,8 +4,8 @@ extends Control
 @onready var sample_hz = $AudioStreamPlayer.stream.mix_rate
 
 @export_category("Engine")
-@export var cylinders: int = 4## amount of cylinders the engine has
-@export var strokes: int = 4## amount of strokes the engine has
+@export var cylinders: int = 4 ## amount of cylinders the engine has
+@export var strokes: int = 4 ## amount of strokes the engine has
 
 @export_category("Sound Characteristics")
 @export_range(0.0, 1.0) var duty_cycle: float = 0.3 ## Changes how long the enigne pulses are. Lower numbers result in shorter pulses.
@@ -21,8 +21,6 @@ var rpm: float = 0.0
 var pulse_hz: float = 0.0
 var phase: float = 0.0
 var playback: AudioStreamPlayback = null # Actual playback stream, assigned in _ready().
-var previous_white_noise: float = 0.0
-var previous_engine_noise: float = 0.0
 
 func _fill_buffer() -> void:
 	var increment: float = pulse_hz / sample_hz
@@ -48,8 +46,6 @@ func _fill_buffer() -> void:
 		pulse_wave = pulse_wave * (4/PI) + (2*duty_cycle) - 1 # Amplitude and displacement correction of the pulse wave.
 		
 		var white_noise: float = randf() # Generate white noise.
-		var low_pass_noise: float = (white_noise + previous_white_noise) / 2 # Simple low pass filter of the white noise.
-		previous_white_noise = white_noise # White noise buffer used in the low pass filter.
 		
 		var volume: float = (rpm * ((1 - starting_volume_percent) / max_rpm)) + starting_volume_percent # increase volume with RPM
 		var engine_sound: float = max(0, pulse_wave) * white_noise # Apply pulse to the white noise.
@@ -67,10 +63,7 @@ func _fill_buffer() -> void:
 		to_fill -= 1
 	
 	for i in range(buffer.size()): # acts as muffler -- allpass filter broken into multiple variables
-		var tan_calc: float = tan(PI * cutoff_frequency / 40939)# buffer.size() / buffer_length ~ sample_rate / duration_in_samples
-																# only works at start when the buffer is 4x size
-																# 40939 ~ (buffer.size() * 4) / buffer_length
-																# no clue ???
+		var tan_calc: float = tan(PI * cutoff_frequency / sample_hz)
 		var a1: float = (tan_calc - 1) / (tan_calc + 1)
 		allpass_output.push_back(a1 * buffer[i] + dn1)
 		dn1 = buffer[i] - a1 * allpass_output[i]
