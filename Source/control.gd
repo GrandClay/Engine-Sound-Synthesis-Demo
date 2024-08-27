@@ -54,8 +54,8 @@ func _fill_buffer() -> void:
 		cutoff_frequency = 12000 * cutoff_percent # 12000 is aribitrary value to "turn off" the filter
 		
 		#    crossfade not currently in use
-		var crossfade_percent: float = min((rpm - idle_rpm)/(max_rpm - idle_rpm) * (1.0/full_pulse_wave_percent), 1.0)
-		var crossfade: float = (saw_wave * (1 - crossfade_percent)) + (engine_sound * crossfade_percent)
+		#var crossfade_percent: float = min((rpm - idle_rpm)/(max_rpm - idle_rpm) * (1.0/full_pulse_wave_percent), 1.0)
+		#var crossfade: float = (saw_wave * (1 - crossfade_percent)) + (engine_sound * crossfade_percent)
 		
 		buffer.push_back(engine_sound * volume) # sound buffer for post-processing
 		
